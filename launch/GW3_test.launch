@@ -1,0 +1,20 @@
+<launch>
+	<node name="gabp_3d_node" pkg="gabp_mapping" type="main_3D.py" output="screen">
+		<param name="pose_topic" value="/odom"/>
+		<param name="sensor_topic" value="/sensorLow/integrated,/sensorHigh/integrated"/>
+		<param name="map_frame" value="/husky/map"/>		
+		<param name="sensor_child_frame" value="/sensorLow,/sensorHigh"/>
+		<param name="occ_map_topic" value="/octomap_binary"/>
+		<param name="map_resolution" value="0.5"/>
+		<param name="pub_freq" value="1"/>
+		<param name="occ_freq" value="0.1"/>
+		<param name="use_blank_map" value="False"/>
+		<param name="map_size" value="50,50,20"/>
+
+		<param name="factor_prior" value="0.5"/>
+		<param name="factor_obs" value="10"/>
+		<param name="factor_time" value="1000000"/>
+		<param name="factor_default" value="0.0001"/>
+		<param name="propagation_epsilon" value="1"/>
+	</node>
+</launch>

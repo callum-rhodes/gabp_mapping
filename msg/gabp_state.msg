@@ -1,0 +1,9 @@
+Header header
+int64 num_nodes
+int64 num_measurements
+int64 msgs_wild
+int64 msgs_residual
+int64 msgs_total
+float64 max_mean
+float64 max_var
+float64 max_measurement
