@@ -74,16 +74,46 @@ For 3D mapping, images show both the projected marginal mean map and the project
 > Expected sensor frequency of incoming messages. This limits the maximum time per wildfire iteration to match incoming data rate. If set to 0, each wildfire iteration will run until residuals reach propagation threshold set on ~epsilon_threshold. Sensor messages received whilst iterating are stored and resolved in the next iteration. 
 
 ~sensor_child_frame (str, default: /base_link)
-> TF from which the sensor pose is taken for inserting sensor measurement into the map
+> TF from which the sensor pose is taken for inserting sensor measurement into the map. If using multiple sensors then include all tf's via comma serperation e.g. '/gas1base,/gas2base,/gas3base'.
 
 ~map_frame (str, default: /map)
 > Parent TF of sensor_child_frame to link sensor to map frame e.g. map --> base_link
 
-~sensor_child_frame (str, default: /base_link)
-> TF from which the sensor pose is taken for inserting sensor measurement into the map
-
 ~occ_map_topic (str, default: /map)
 > Topic that defines the occupancy grid / Octomap topic to read from
 
+~occ_freq (float, default: 0.1)
+> Frequency at which the occupancy/octomap is updated to check for new prior factors and neighbours
+
+~pub_freq (float, default: 1)
+> Target frequency for publishing the image, marker and state messages
+
 ~map_resolution (float, default: 0.3)
-> Desired resolution of the factor graph.
+> Desired resolution of the factor graph
+
+~use_blank_map (str, default: False)
+> If set to 'True' a blank map (no obstacles) is used to define the mapping domain. Size is set by the ~map_size parameter.
+
+~map_size (str, default: 50,50,20)
+> The size of the blank map in x,y,z. If using the 2D solver, 2 arguments should be given e.g. '50,50'
+
+~factor_prior (float, default: 0.5)
+> Prior factor precision value between nodes in the factor graph
+
+~factor_obs (float, default: 10)
+> Observation factor precision value of measurements to their corresponding node
+
+~factor_time (float, default: 1e10)
+> Decay factor precision value that increases measurement uncertainty over time. Lower means measurements decay quicker
+
+~factor_default (float, default: 1e-4)
+> Default factor precision value of initial cell concentration of zero
+
+~propagation_threshold (float, default: 1)
+> Threshold between consecutive messages along an edge that defines wildfire propagation and factor graph growth
+
+~distance_metric (str, default: Bhattacharyya)
+> Metric of the distance between consecutive messages that effects wildfire propagation, factor growth and the residual queue. Available options 'Bhattacharyya', 'Mahalanobis' and 'Euclidean'.
+
+~filepath (str, default: /home/[name]/)
+> Filepath that the mean and var map values are saved to. Saving occurs each time the occ map updates and when ending the program 
