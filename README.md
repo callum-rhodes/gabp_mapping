@@ -68,7 +68,10 @@ For 3D mapping, images show both the projected marginal mean map and the project
 ## Parameters
 
 ~sensor_topic (str, default: /gasSensor)
-> Topic from which sensor measurements are taken (must be of type Float32)
+> Topic from which sensor measurements are taken, multiple sensors can be used via comma seperation e.g. '/gas1,/gas2,/gas3' (topic type should be Float32)
+
+~sensor_freq (float, default: 0)
+> Expected sensor frequency of incoming messages. This limits the maximum time per wildfire iteration to match incoming data rate. If set to 0, each wildfire iteration will run until residuals reach propagation threshold set on ~epsilon_threshold. Sensor messages received whilst iterating are stored and resolved in the next iteration. 
 
 ~sensor_child_frame (str, default: /base_link)
 > TF from which the sensor pose is taken for inserting sensor measurement into the map
@@ -83,4 +86,4 @@ For 3D mapping, images show both the projected marginal mean map and the project
 > Topic that defines the occupancy grid / Octomap topic to read from
 
 ~map_resolution (float, default: 0.3)
-> Desired resolution of the factor graph
+> Desired resolution of the factor graph.
