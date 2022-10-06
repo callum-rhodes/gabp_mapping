@@ -5,7 +5,7 @@ This package contains ROS integrated software for performing 2D and 3D gas distr
 
 ## Software Requirements
 ### System:
-- [ROS Melodic](http://wiki.ros.org/melodic) (tested and deployed on Melodic, should work with Kinetic)
+- [ROS Melodic](http://wiki.ros.org/melodic) (tested and deployed on Melodic)
 - Octomap_server
     - ```sudo apt install ros-melodic-octomap-server```
 - Python 2.7
@@ -15,6 +15,8 @@ This package contains ROS integrated software for performing 2D and 3D gas distr
 - octomap-python
     - ```pip install octomap-python```
     - [GitHub repository for issues with installation](https://github.com/wkentaro/octomap-python)
+    - Specific issues with _ZN7octomap14AbstractOcTree4readERKSs see [here](https://github.com/wkentaro/octomap-python/issues/5) and [here](https://github.com/wkentaro/octomap-python/issues/3)
+    - Specific issues with libdynamicedt3d see [here](https://github.com/wkentaro/octomap-python/issues/1)
 
 ## Installation
 1) Change directory to your catkin workspace source folder, e.g.
@@ -29,14 +31,14 @@ This package contains ROS integrated software for performing 2D and 3D gas distr
 
 ## Running package
 ### 2D mapping
-When running a 2D node, the "main_2D.py" node should be used. This node subscribes to a nav_msgs/OccupancyGrid message to build the factor graph. If an occupancy map is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50'.
+When running a 2D node, the "main_2D.py" node should be used. This node subscribes to a nav_msgs/OccupancyGrid message to build the factor graph. If an occupancy map is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50' (blank maps always start with an origin of [0,0]).
 
 An example 2D launch file is included in /launch/2D_example.launch.
 
 ### 3D mapping
-When running a 3D node, the "main_3D.py" node should be used. This node subscribes to the octomap_msgs/Octomap binary message topic and uses the map saving feature of octomap_server to save the tree in the .bt format that octomap-python requires. to build the factor graph. If an binary octomap is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50,10'.
+When running a 3D node, the "main_3D.py" node should be used. This node subscribes to the octomap_msgs/Octomap binary message topic and uses the map saving feature of octomap_server to save the tree in the .bt format that octomap-python requires. to build the factor graph. If an binary octomap is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50,10'(blank maps always start with an origin of [0,0,0]).
 
-An example 3D launch file is included in /launch/2D_example.launch.
+An example 3D launch file is included in /launch/3D_example.launch.
 
 ### Visualisation
 
@@ -50,9 +52,15 @@ For 3D mapping, images show both the projected marginal mean map and the project
 
 - /gabp/mean/marker ([visualization_msgs/Marker](http://docs.ros.org/en/noetic/api/visualization_msgs/html/msg/Marker.html)) \
     Marginal mean value of each factor in the factor graph plotted in space as a colourised voxel
+    
+- /gabp/mean/matrix ([std_msgs/Float32MultiArray](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Float32MultiArray.html)) \
+    Marginal mean values published as a multi-array matrix. Layout of matrix defined in /gabp/mean/matrix/layout.  
 
 - /gabp/var/img ([sensor_msgs/Image](http://docs.ros.org/en/noetic/api/sensor_msgs/html/msg/Image.html)) \
     Marginal variance value of each factor in the factor graph plotted as a colourised image
+    
+- /gabp/var/matrix ([std_msgs/Float32MultiArray](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Float32MultiArray.html)) \
+    Marginal variance values published as a multi-array matrix. Layout of matrix defined in /gabp/var/matrix/layout.  
 
 - /gabp/state (gabp_mapping/state) \
   State message of the factor graph: 
@@ -114,6 +122,3 @@ For 3D mapping, images show both the projected marginal mean map and the project
 
 ~distance_metric (str, default: Bhattacharyya)
 > Metric of the distance between consecutive messages that effects wildfire propagation, factor growth and the residual queue. Available options 'Bhattacharyya', 'Mahalanobis' and 'Euclidean'.
-
-~filepath (str, default: /home/[name]/)
-> Filepath that the mean and var map values are saved to. Saving occurs each time the occ map updates and when ending the program 
