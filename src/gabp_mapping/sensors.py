@@ -1,6 +1,6 @@
 import numpy as np
 import rospy.rostime
-import tf
+import tf2_ros
 
 
 class GasSensor:
@@ -26,9 +26,12 @@ class GasSensor:
         self.timestamp = []
 
         if sensor_topic is not None:
+	    self.sensor_topic = sensor_topic
+	    self.sensor_msg_type = sensor_msg_type
             self.rate = rospy.Rate(10)
-            self.sub = rospy.Subscriber(sensor_topic, sensor_msg_type, self.sensor_callback)
-            self.tf_listener = tf.TransformListener()
+            self.sub = rospy.Subscriber(sensor_topic, sensor_msg_type, self.sensor_callback, queue_size=1)
+	    self.tfBuffer = tf2_ros.Buffer(rospy.Duration(10))
+	    self.tf_listener = tf2_ros.TransformListener(self.tfBuffer)
             self.parent_frame = tf_parent
             self.child_frame = tf_child
 
@@ -55,15 +58,38 @@ class GasSensor:
 
     def sensor_callback(self, data):
         try:
-            self.tf_listener.waitForTransform(self.parent_frame, self.child_frame, rospy.Time(0), rospy.Duration(1))
-            (pose, rot) = self.tf_listener.lookupTransform(self.parent_frame, self.child_frame, rospy.Time(0))
+            # self.tf_listener.waitForTransform(self.parent_frame, self.child_frame, rospy.Time(0), rospy.Duration(1))
+            # (pose, rot) = self.tf_listener.lookupTransform(self.parent_frame, self.child_frame, rospy.Time(0))
+	    trans = self.tfBuffer.lookup_transform(self.parent_frame, self.child_frame, rospy.Time(0))
             self.timestamp.append(rospy.get_time())
-            self.pose.append(pose)
+            self.pose.append([trans.transform.translation.x, trans.transform.translation.y, trans.transform.translation.z])
             self.data.append(data.data)
             # self.rate.sleep()
 
-        except(tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            rospy.loginfo('-- Sensor TF Callback error, skipping --')
+        except(tf2_ros.LookupException):
+            rospy.logwarn('!!! Sensor TF lookup error, attempting to reinitialise sensor until TF name found !!!')
+	    self.sub.unregister()
+	    del self.tf_listener
+	    del self.tfBuffer
+	    self.sub = rospy.Subscriber(self.sensor_topic, self.sensor_msg_type, self.sensor_callback, queue_size=1)
+	    self.tfBuffer = tf2_ros.Buffer(rospy.Duration(10))
+	    self.tf_listener = tf2_ros.TransformListener(self.tfBuffer)
+        except(tf2_ros.ConnectivityException):
+            rospy.logwarn('!!! Sensor TF cannot find connection between requested TFs, attempting to reinitialise sensor until connection found !!!')
+	    self.sub.unregister()
+	    del self.tf_listener
+	    del self.tfBuffer
+	    self.sub = rospy.Subscriber(self.sensor_topic, self.sensor_msg_type, self.sensor_callback, queue_size=1)
+	    self.tfBuffer = tf2_ros.Buffer(rospy.Duration(10))
+	    self.tf_listener = tf2_ros.TransformListener(self.tfBuffer)
+        except(tf2_ros.ExtrapolationException):
+            rospy.logwarn('!!! Sensor TF extrapolation error, attempting to reinitialise sensor but may need to be manually reset if persists !!!')
+	    self.sub.unregister()
+	    del self.tf_listener
+	    del self.tfBuffer
+	    self.sub = rospy.Subscriber(self.sensor_topic, self.sensor_msg_type, self.sensor_callback, queue_size=1)
+	    self.tfBuffer = tf2_ros.Buffer(rospy.Duration(10))
+	    self.tf_listener = tf2_ros.TransformListener(self.tfBuffer)
 
 
 class WindSensor:
