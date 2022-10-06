@@ -2,6 +2,7 @@
 
 This package contains ROS integrated software for performing 2D and 3D gas distribution with a mobile sensor
 
+![GaBP applied to a gas mapping scenario](https://github.com/callum-rhodes/gabp_mapping/blob/main/githubGaBP.png?raw=true)
 
 ## Software Requirements
 ### System:
