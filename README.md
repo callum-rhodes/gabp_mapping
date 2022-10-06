@@ -31,7 +31,7 @@ This package contains ROS integrated software for performing 2D and 3D gas distr
     - ```catkin_make --only-pkg-with-deps gabp_mapping```
 
 
-## Running package
+## Running the package
 ### 2D mapping
 When running a 2D node, the "main_2D.py" node should be used. This node subscribes to a nav_msgs/OccupancyGrid message to build the factor graph. If an occupancy map is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50' (blank maps always start with an origin of [0,0]).
 
@@ -46,6 +46,21 @@ An example 3D launch file is included in /launch/3D_example.launch.
 
 An example .rviz config file can be found in /rviz/gabp_3D.rviz. This can be used for both 2D and 3D nodes. For 2D mapping, images show both the marginal mean map and the variance map (on /gabp/mean/img and /gabp/var/img repectively) and a marker shows the marginal mean map projected onto the scenario floor (/gabp/mean/marker).
 For 3D mapping, images show both the projected marginal mean map and the projected variance map (on /gabp/mean/img and /gabp/var/img repectively), where the projection is averaged along the z-axis. A marker shows the marginal mean map in 3D space with decreasing alpha for lower concentrations (/gabp/mean/marker).
+
+## Example bag files
+
+An example dataset for running both 2D and 3D gas mapping can be found [here](https://drive.google.com/file/d/1NKHg3k21D65NfKRMdxNObnseSXXHH8TN/view?usp=sharing). To run the dataset follow these instructions:
+
+1. Download the .tar file and extract using ```tar -xvf Example_bags.tar``` 
+2. Start the ros master using ```roscore``` 
+3. Open a new terminal and set ```rosparam set use_sim_time true``` 
+4. ```cd``` to the extracted bag files location 
+5. Begin the rosbag using ```rosbag play --clock --pause *.bag``` 
+6. Open a new terminal and enter ```roscd gabp_mapping/rviz``` 
+7. Begin RViz using ```rviz -d gabp_3D.rviz``` 
+8. Open a new terminal and run ```roslaunch gabp_mapping example_3D.launch``` , or ```roslaunch gabp_mapping example_2D.launch``` 
+9. Go back to the terminal running the rosbag, the hit <kbd>Space</kbd>
+10. RViz should now populate showing the Octomap and gas distribution markers as the robot explores its environment
 
 ## Published topics
 
