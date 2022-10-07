@@ -1,0 +1,21 @@
+<launch>
+	<node name="gabp_2d_node" pkg="gabp_mapping" type="main_2D.py" output="screen">
+		<param name="sensor_freq" value="0.5" />
+		<param name="sensor_topic" value="/gasSensor"/>
+		<param name="map_frame" value="map"/>		
+		<param name="sensor_child_frame" value="sensor_link"/>
+		<param name="occ_map_topic" value="/map"/>
+		<param name="map_resolution" value="0.2"/>
+		<param name="pub_freq" value="1"/>
+		<param name="occ_freq" value="0.2"/>
+		<param name="use_blank_map" value="False"/>
+		<param name="map_size" value="50,50"/>
+
+		<param name="factor_prior" value="0.5"/>
+		<param name="factor_obs" value="10"/>
+		<param name="factor_time" value="100"/>
+		<param name="factor_default" value="0.01"/>
+		<param name="propagation_epsilon" value="1"/>
+		<param name="distance_metric" value="Euclidean"/>
+	</node>
+</launch>
