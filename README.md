@@ -58,7 +58,7 @@ An example dataset for running both 2D and 3D gas mapping can be found [here](ht
 5. Begin the rosbag using ```rosbag play --clock --pause *.bag``` 
 6. Open a new terminal and enter ```roscd gabp_mapping/rviz``` 
 7. Begin RViz using ```rviz -d gabp_3D.rviz``` 
-8. Open a new terminal and run ```roslaunch gabp_mapping example_3D.launch``` , or ```roslaunch gabp_mapping example_2D.launch``` 
+8. Open a new terminal and run ```roslaunch gabp_mapping Example_3D.launch``` , or ```roslaunch gabp_mapping Example_2D.launch``` 
 9. Go back to the terminal running the rosbag, then hit <kbd>Space</kbd>
 10. RViz should now populate showing the Octomap and gas distribution markers as the robot explores its environment
 
