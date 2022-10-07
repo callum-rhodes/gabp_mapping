@@ -98,10 +98,10 @@ An example dataset for running both 2D and 3D gas mapping can be found [here](ht
 ~sensor_freq (float, default: 0)
 > Expected sensor frequency of incoming messages. This limits the maximum time per wildfire iteration to match incoming data rate. If set to 0, each wildfire iteration will run until residuals reach propagation threshold set on ~epsilon_threshold. Sensor messages received whilst iterating are stored and resolved in the next iteration. 
 
-~sensor_child_frame (str, default: /base_link)
+~sensor_child_frame (str, default: base_link)
 > TF from which the sensor pose is taken for inserting sensor measurement into the map. If using multiple sensors then include all tf's via comma serperation e.g. '/gas1base,/gas2base,/gas3base'.
 
-~map_frame (str, default: /map)
+~map_frame (str, default: map)
 > Parent TF of sensor_child_frame to link sensor to map frame e.g. map --> base_link
 
 ~occ_map_topic (str, default: /map)
