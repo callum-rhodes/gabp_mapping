@@ -1,0 +1,62 @@
+<launch>
+	<node pkg="topic_tools" type="relay" name="pcl_fuser_velo" args="/husky/velodyne_points /husky/fused_points"/>
+        <node pkg="topic_tools" type="relay" name="pcl_fuser_rs" args="/husky/rslidar_points /husky/fused_points"/>
+
+	<node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+		<param name="resolution" value="0.2" />
+		
+		<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+		<param name="frame_id" type="string" value="husky/map" />
+		<param name="base_frame_id" value="husky/map" />		
+		
+		<!-- maximum range to integrate (speedup!) -->
+		<param name="sensor_model/max_range" value="50.0" />
+		<param name="sensor_model_hit" value="0.9" />
+		<param name="sensor_model_miss" value="0.4" />
+		<param name="occupancy_min_z" value="1"/>
+		<param name="occupancy_max_z" value="2"/>
+		<param name="filter_ground" value="false" />
+		<param name="ground_filter/distance" value="0.04" />
+		<param name="ground_filter/angle" value="0.15" />
+		<param name="ground_filter/plane_distance" value="0.07" />
+		<!-- data source to integrate (PointCloud2) -->
+		<remap from="cloud_in" to="/husky/fused_points" />	
+	</node>
+
+	<node pkg="tf" type="static_transform_publisher" name="base2plate" args="0.0812 0 0.245 0 0 0 husky/base_link /husky/top_plate_link 100"/>
+
+        <node pkg="offline_processing" type="throttlePID.py" name="highThrottle" output="screen" >
+                 <param name="out_topic" value="/gasHigh/integrated"/>
+                <param name="PID_topic" value="/GasSensor1"/>
+                <param name="pub_freq" value="1"/>
+        </node>
+        <node pkg="offline_processing" type="throttlePID.py" name="lowThrottle" output="screen">
+                 <param name="out_topic" value="/gasLow/integrated"/>
+                <param name="PID_topic" value="/GasSensor2"/>
+                <param name="pub_freq" value="1"/>
+        </node>
+        <node pkg="offline_processing" type="throttlePID.py" name="midThrottle" output="screen">
+                <param name="out_topic" value="/gasMid/integrated"/>
+                <param name="PID_topic" value="/GasSensor3"/>
+                <param name="pub_freq" value="1"/>
+        </node>
+
+	<node name="gabp_3d_node" pkg="gabp_mapping" type="main_3D.py" output="screen">
+		<param name="sensor_freq" value="1" />
+		<param name="sensor_topic" value="/gasLow/integrated,/gasMid/integrated,/gasHigh/integrated"/>
+		<param name="map_frame" value="husky/map"/>		
+		<param name="sensor_child_frame" value="husky/sensorLow,husky/sensorMid,husky/sensorHigh"/>
+		<param name="occ_map_topic" value="/octomap_binary"/>
+		<param name="map_resolution" value="0.5"/>
+		<param name="pub_freq" value="1"/>
+		<param name="occ_freq" value="0.05"/>
+		<param name="use_blank_map" value="False"/>
+		<param name="map_size" value="50,50,20"/>
+
+		<param name="factor_prior" value="0.5"/>
+		<param name="factor_obs" value="10"/>
+		<param name="factor_time" value="1000000"/>
+		<param name="factor_default" value="0.0001"/>
+		<param name="propagation_epsilon" value="1"/>
+	</node>
+</launch>
