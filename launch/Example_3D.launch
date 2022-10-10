@@ -25,17 +25,17 @@
 
 	<node pkg="tf" type="static_transform_publisher" name="base2plate" args="0.0812 0 0.245 0 0 0 husky/base_link /husky/top_plate_link 100"/>
 
-        <node pkg="offline_processing" type="throttlePID.py" name="highThrottle" output="screen" >
+        <node pkg="gabp_mapping" type="throttlePID.py" name="highThrottle" output="screen" >
                  <param name="out_topic" value="/gasHigh/integrated"/>
                 <param name="PID_topic" value="/GasSensor1"/>
                 <param name="pub_freq" value="1"/>
         </node>
-        <node pkg="offline_processing" type="throttlePID.py" name="lowThrottle" output="screen">
+        <node pkg="gabp_mapping" type="throttlePID.py" name="lowThrottle" output="screen">
                  <param name="out_topic" value="/gasLow/integrated"/>
                 <param name="PID_topic" value="/GasSensor2"/>
                 <param name="pub_freq" value="1"/>
         </node>
-        <node pkg="offline_processing" type="throttlePID.py" name="midThrottle" output="screen">
+        <node pkg="gabp_mapping" type="throttlePID.py" name="midThrottle" output="screen">
                 <param name="out_topic" value="/gasMid/integrated"/>
                 <param name="PID_topic" value="/GasSensor3"/>
                 <param name="pub_freq" value="1"/>

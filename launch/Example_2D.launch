@@ -25,7 +25,7 @@
 
 	<node pkg="tf" type="static_transform_publisher" name="base2plate" args="0.0812 0 0.245 0 0 0 husky/base_link /husky/top_plate_link 100"/>
 
-        <node pkg="offline_processing" type="throttlePID.py" name="lowThrottle" output="screen">
+        <node pkg="gabp_mapping" type="throttlePID.py" name="lowThrottle" output="screen">
                  <param name="out_topic" value="/gasLow/integrated"/>
                 <param name="PID_topic" value="/GasSensor2"/>
                 <param name="pub_freq" value="1"/>
@@ -38,7 +38,7 @@
 		<param name="sensor_child_frame" value="husky/sensorLow"/>
 		<param name="occ_map_topic" value="/projected_map"/>
 		<param name="map_resolution" value="0.2"/>
-		<param name="pub_freq" value="1"/>
+		<param name="pub_freq" value="0.1"/>
 		<param name="occ_freq" value="0.2"/>
 		<param name="use_blank_map" value="False"/>
 		<param name="map_size" value="50,50"/>
@@ -48,5 +48,6 @@
 		<param name="factor_time" value="1000000"/>
 		<param name="factor_default" value="0.0001"/>
 		<param name="propagation_epsilon" value="1"/>
+		<param name="distance_metric" value="Euclidean"/>
 	</node>
 </launch>
