@@ -35,12 +35,12 @@ This package contains ROS integrated software for performing 2D and 3D gas distr
 ### 2D mapping
 When running a 2D node, the "main_2D.py" node should be used. This node subscribes to a nav_msgs/OccupancyGrid message to build the factor graph. If an occupancy map is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50' (blank maps always start with an origin of [0,0]).
 
-An example 2D launch file is included in /launch/2D_example.launch.
+An example 2D launch file is included in /launch/Example_2D.launch.
 
 ### 3D mapping
-When running a 3D node, the "main_3D.py" node should be used. This node subscribes to the octomap_msgs/Octomap binary message topic and uses the map saving feature of octomap_server to save the tree in the .bt format that octomap-python requires. to build the factor graph. If an binary octomap is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50,10'(blank maps always start with an origin of [0,0,0]).
+When running a 3D node, the "main_3D.py" node should be used. This node subscribes to the octomap_msgs/Octomap binary message topic and uses the map saving feature of octomap_server to save the tree in the .bt format that octomap-python requires. to build the factor graph. If an binary octomap is not available, the "use_blank_map" parameter can be set to 'True' and a corresponding size set on the "map_size" parameter e.g. '50,50,10' (blank maps always start with an origin of [0,0,0]).
 
-An example 3D launch file is included in /launch/3D_example.launch.
+An example 3D launch file is included in /launch/Example_3D.launch.
 
 ### Visualisation
 
