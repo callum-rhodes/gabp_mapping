@@ -2,6 +2,7 @@
 
 This package contains ROS integrated software for performing 2D and 3D gas distribution with a mobile sensor. A youtube video of the 3D mapping system being demonstrated onboard a mobile platform can be found [here](https://youtu.be/crAJd4afW8c). If you wish to cite our work please use:
 > Rhodes, C., Liu, C., & Chen, W. H. (2023). Structurally aware 3D gas distribution mapping using belief propagation: a real-time algorithm for robotic deployment. IEEE Transactions on Automation Science and Engineering. [DOI](https://doi.org/10.1109/TASE.2023.3249651)
+
 > Rhodes, C., Liu, C., & Chen, W. H. (2022, October). Scalable probabilistic gas distribution mapping using Gaussian belief propagation. In 2022 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS). IEEE.
 
 ![GaBP applied to a gas mapping scenario](https://github.com/callum-rhodes/gabp_mapping/blob/main/githubGaBP.png?raw=true)
